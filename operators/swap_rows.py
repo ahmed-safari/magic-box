@@ -2,7 +2,7 @@ from .base_operator import BaseOperator
 import random
 
 
-class SwapElements(BaseOperator):
+class SwapRows(BaseOperator):
     def __init__(self):
         super().__init__()  # Call the constructor of the parent class (to initialize self.score)
         self.row1 = 0
