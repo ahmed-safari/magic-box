@@ -20,10 +20,3 @@ solver = RandomSelectionSolver(box, operators, MAX_ITERATIONS)
 
 # Solve the box
 # solver.solve()
-
-# Test operators
-print("Initial:", box)
-operators[0].apply(box)
-print("After apply:", box)
-operators[0].revert(box)
-print("After revert:", box)
