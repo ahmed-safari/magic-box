@@ -1,6 +1,6 @@
 # Test operators
 
-from operators import SwapElements, SwapRows
+from operators import SwapElements, SwapRows, SwapColumns
 from utils import create_initial
 
 
@@ -8,7 +8,7 @@ from utils import create_initial
 box = create_initial(3)
 
 # Operators
-operators = [SwapElements(), SwapRows()]
+operators = [SwapElements(), SwapRows(), SwapColumns()]
 
 
 # Test the operators
