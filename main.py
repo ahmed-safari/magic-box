@@ -1,4 +1,4 @@
-from operators import SwapElements
+from operators import SwapElements, SwapRows, SwapColumns
 from solvers import RandomSelectionSolver
 from utils import create_initial, calculate_objective
 
@@ -12,11 +12,16 @@ MAX_ITERATIONS = 1000
 box = create_initial(N)
 
 # Create the list of operators
-operators = [SwapElements()]
+operators = [SwapElements(), SwapRows(), SwapColumns()]
 
 
 # Create a solver
 solver = RandomSelectionSolver(box, operators, MAX_ITERATIONS)
 
 # Solve the box
-# solver.solve()
+solver.solve()
+
+# Print the solution
+print("Solution:", solver.solution)
+print("Cost:", solver.cost)
+print("Found at iteration:", solver.found_at)
