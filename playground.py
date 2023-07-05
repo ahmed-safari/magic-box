@@ -1,5 +1,3 @@
-# Test operators
-
 from operators import SwapElements, SwapRows, SwapColumns
 from utils import create_initial
 
