@@ -6,11 +6,13 @@ class AcceptImproving(BaseAcceptance):
         super().__init__()  # call the parent constructor (to initialize self.stuck_count)
 
     def accept(self, new_cost, old_cost):
-        if self.stuck_count >= self.max_stuck_count:
-            self.stuck_count = 0
-            return True
-        if new_cost < old_cost:
-            return True
-        else:
-            self.stuck_count += 1
-            return False
+        # Escape local optima/minima
+        if self.stuck_count >= self.max_stuck_count:  # If we are stuck for too long
+            self.stuck_count = 0  # Reset the stuck counter
+            return True  # Accept the new solution
+
+        if new_cost < old_cost:  # If the new solution is better than the old one
+            return True  # Accept the new solution
+        else:  # If the new solution is worse than the old one
+            self.stuck_count += 1  # Increment the stuck counter
+            return False  # Reject the new solution

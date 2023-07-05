@@ -24,7 +24,7 @@ class RandomSelectionSolver(BaseSolver):
 
             # Check if the new solution is accepted
             if self.acceptance.accept(new_cost=new_cost, old_cost=self.cost):
-                self.cost = new_cost
+                self.cost = new_cost  # Update the current cost
 
             # Otherwise, revert the operator
             else:
