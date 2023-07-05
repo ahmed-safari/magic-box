@@ -8,7 +8,8 @@ from .swap_diagonals import SwapDiagonals
 from .swap_oddEven import SwapOddEven
 from .reverse_row import ReverseRow
 from .reverse_column import ReverseColumn
-from .rotate import Rotate270
+from .rotate_270 import Rotate270
+from .rotate_180 import Rotate180
 
 LLH_CLASSES = [
     SwapElements(),
@@ -21,5 +22,6 @@ LLH_CLASSES = [
     SwapOddEven(),
     ReverseRow(),
     ReverseColumn(),
-    Rotate270()
+    Rotate270(),
+    Rotate180
 ]
