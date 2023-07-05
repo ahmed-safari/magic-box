@@ -1,4 +1,7 @@
-class AcceptAny:
+from .base_acceptance import BaseAcceptance
+
+
+class AcceptAny(BaseAcceptance):
     def __init__(self):
         super().__init__()  # call the parent constructor (to initialize self.stuck_count)
 
