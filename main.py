@@ -16,7 +16,9 @@ operators = LLH_CLASSES
 
 
 # Create a solver
-solver = RandomSelectionSolver(box, operators, MAX_ITERATIONS)
+solver = RandomSelectionSolver(
+    box, operators, MAX_ITERATIONS, acceptance_criterion="accept_improving"
+)
 
 # Solve the box
 solver.solve()
