@@ -6,6 +6,7 @@ import copy
 class BaseSolver:
     ACCEPTANCE_CLASSES = {
         "accept_any": AcceptAny(),
+        "accept_improving": AcceptImproving(),
     }
 
     def __init__(
