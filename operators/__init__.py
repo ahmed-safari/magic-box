@@ -4,6 +4,17 @@ from .swap_columns import SwapColumns
 from .transpose import Transpose
 from .shuffle_row import ShuffleRow
 from .shuffle_column import ShuffleColumn
-
 from .swap_diagonals import SwapDiagonals
 from .swap_oddEven import SwapOddEven
+
+
+LLH_CLASSES = [
+    SwapElements(),
+    SwapRows(),
+    SwapColumns(),
+    Transpose(),
+    ShuffleRow(),
+    ShuffleColumn(),
+    SwapDiagonals(),
+    SwapOddEven(),
+]

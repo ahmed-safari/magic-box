@@ -1,4 +1,4 @@
-from operators import SwapElements, SwapRows, SwapColumns
+from operators import LLH_CLASSES
 from solvers import RandomSelectionSolver
 from utils import create_initial, calculate_objective
 
@@ -12,7 +12,7 @@ MAX_ITERATIONS = 1000
 box = create_initial(N)
 
 # Create the list of operators
-operators = [SwapElements(), SwapRows(), SwapColumns()]
+operators = LLH_CLASSES
 
 
 # Create a solver

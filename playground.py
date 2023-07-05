@@ -1,13 +1,4 @@
-from operators import (
-    SwapElements,
-    SwapRows,
-    SwapColumns,
-    Transpose,
-    ShuffleRow,
-    ShuffleColumn,
-    SwapDiagonals,
-    SwapOddEven
-)
+from operators import LLH_CLASSES
 from utils import create_initial
 
 
@@ -15,16 +6,7 @@ from utils import create_initial
 box = create_initial(3)
 
 # Operators
-operators = [
-    SwapElements(),
-    SwapRows(),
-    SwapColumns(),
-    Transpose(),
-    ShuffleRow(),
-    ShuffleColumn(),
-    SwapDiagonals(), 
-    SwapOddEven()
-]
+operators = LLH_CLASSES
 
 
 # Test the operators
