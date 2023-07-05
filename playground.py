@@ -6,7 +6,8 @@ from operators import (
     ShuffleRow,
     ShuffleColumn,
     SwapDiagonals,
-    SwapOddEven
+    SwapOddEven,
+    ReverseRow
 )
 from utils import create_initial
 
@@ -23,7 +24,8 @@ operators = [
     ShuffleRow(),
     ShuffleColumn(),
     SwapDiagonals(), 
-    SwapOddEven()
+    SwapOddEven(),
+    ReverseRow()
 ]
 
 

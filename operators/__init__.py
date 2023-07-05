@@ -7,3 +7,4 @@ from .shuffle_column import ShuffleColumn
 
 from .swap_diagonals import SwapDiagonals
 from .swap_oddEven import SwapOddEven
+from .reverse_row import ReverseRow
