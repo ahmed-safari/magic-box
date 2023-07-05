@@ -1,4 +1,11 @@
-from operators import SwapElements, SwapRows, SwapColumns
+from operators import (
+    SwapElements,
+    SwapRows,
+    SwapColumns,
+    Transpose,
+    ShuffleRow,
+    ShuffleColumn,
+)
 from utils import create_initial
 
 
@@ -6,7 +13,14 @@ from utils import create_initial
 box = create_initial(3)
 
 # Operators
-operators = [SwapElements(), SwapRows(), SwapColumns()]
+operators = [
+    SwapElements(),
+    SwapRows(),
+    SwapColumns(),
+    Transpose(),
+    ShuffleRow(),
+    ShuffleColumn(),
+]
 
 
 # Test the operators
