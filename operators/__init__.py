@@ -23,5 +23,5 @@ LLH_CLASSES = [
     ReverseRow(),
     ReverseColumn(),
     Rotate270(),
-    Rotate180
+    Rotate180(),
 ]
