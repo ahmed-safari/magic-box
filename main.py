@@ -22,6 +22,9 @@ solver = RandomSelectionSolver(box, operators, MAX_ITERATIONS)
 solver.solve()
 
 # Print the solution
-print("Solution:", solver.solution)
-print("Cost:", solver.cost)
+print("Best Solution:", solver.best_solution)
+print("Best Cost:", solver.best_cost)
 print("Found at iteration:", solver.found_at)
+
+print("Final accepted cost:", solver.cost)
+print("Final accepted solution:", solver.solution)
