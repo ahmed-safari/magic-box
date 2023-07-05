@@ -5,6 +5,8 @@ from operators import (
     Transpose,
     ShuffleRow,
     ShuffleColumn,
+    SwapDiagonals,
+    SwapOddEven
 )
 from utils import create_initial
 
@@ -20,6 +22,8 @@ operators = [
     Transpose(),
     ShuffleRow(),
     ShuffleColumn(),
+    SwapDiagonals(), 
+    SwapOddEven()
 ]
 
 
