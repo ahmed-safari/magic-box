@@ -6,7 +6,7 @@ class ReverseColumn(BaseOperator):
         super().__init__()  # Call the constructor of the parent class (to initialize self.score)
         self.index = 0
 
-    def reverse_column(self, box):
+    def reverse_column(self, box):  # randomly selects a column and reverses it
         n = len(box)
         start = 0
         end = n - 1
