@@ -10,7 +10,7 @@ operators = LLH_CLASSES
 
 
 # Test the operators
-
+print(f"Testing {len(operators)} operators:")
 for operator in operators:
     print(
         "Operator:", operator.__class__.__name__
