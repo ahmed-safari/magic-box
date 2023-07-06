@@ -8,9 +8,7 @@ class Rotate180(BaseOperator):
       
     def apply(self, box):
         n = len(box)
-
-        n = len(box)
-
+        
         for i in range(n // 2):
             for j in range(n):
                 box[i][j], box[n - i - 1][n - j - 1] = box[n - i - 1][n - j - 1], box[i][j]
