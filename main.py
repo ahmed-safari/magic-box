@@ -1,12 +1,21 @@
+import matplotlib.pyplot as plt
 from operators import LLH_CLASSES
 from solvers import RandomSelectionSolver, EfficacyRouletteSolver
 from utils import create_initial, calculate_objective
-
+import numpy as np
 
 # Set parameters
 N = 4
 MAX_ITERATIONS = 1000
-
+ACCEPTANCE_CRITERIA = [
+    "accept_improving",
+    "accept_any",
+]
+SOLVER_CLASSES = [
+    RandomSelectionSolver,
+    EfficacyRouletteSolver,
+]
+RUNS = 31
 
 # Create a box
 box = create_initial(N)
@@ -14,24 +23,52 @@ box = create_initial(N)
 # Create the list of operators
 operators = LLH_CLASSES
 
+# Test all solver/criterion combinations
+costs = {
+    solver.__name__ + " (" + criterion + ")": []
+    for solver in SOLVER_CLASSES
+    for criterion in ACCEPTANCE_CRITERIA
+}
+iterations = {
+    solver.__name__ + " (" + criterion + ")": []
+    for solver in SOLVER_CLASSES
+    for criterion in ACCEPTANCE_CRITERIA
+}
 
-# Create a solver
-solver = EfficacyRouletteSolver(
-    box, operators, MAX_ITERATIONS, acceptance_criterion="accept_improving"
-)
+for Solver in SOLVER_CLASSES:
+    for criterion in ACCEPTANCE_CRITERIA:
+        for _ in range(RUNS):
+            # Create a solver
+            solver = Solver(
+                box, operators, MAX_ITERATIONS, acceptance_criterion=criterion
+            )
 
-# Solve the box
-solver.solve()
+            # Solve the box
+            solver.solve()
 
-# Print the solution
-print("Best Solution:", solver.best_solution)
-print("Best Cost:", solver.best_cost)
-print("Found at iteration:", solver.found_at)
+            # Store the result
+            costs[Solver.__name__ + " (" + criterion + ")"].append(solver.best_cost)
+            iterations[Solver.__name__ + " (" + criterion + ")"].append(solver.found_at)
 
-print("Final accepted cost:", solver.cost)
-print("Final accepted solution:", solver.solution)
+# Sort the results by median best cost, ascending
+sorted_keys = sorted(costs.keys(), key=lambda x: np.median(costs[x]))
 
-# Print scores of the operators
-print("Scores:")
-for operator in solver.llh_list:
-    print(f"{operator.__class__.__name__}: {operator.score}")
+# Plot the results
+plt.figure(figsize=(10, 5))
+
+# Box plot of best costs
+plt.subplot(121)
+plt.boxplot([costs[key] for key in sorted_keys], vert=False, patch_artist=True)
+plt.yticks(np.arange(1, len(sorted_keys) + 1), sorted_keys)
+plt.xlabel("Best Cost")
+plt.title("Best Cost Box Plots")
+
+# Box plot of iterations at which the best solution was found
+plt.subplot(122)
+plt.boxplot([iterations[key] for key in sorted_keys], vert=False, patch_artist=True)
+plt.yticks(np.arange(1, len(sorted_keys) + 1), sorted_keys)
+plt.xlabel("Found_at Iteration")
+plt.title("Iteration Box Plots")
+
+plt.tight_layout()
+plt.show()
