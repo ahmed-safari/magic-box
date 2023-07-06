@@ -1,12 +1,18 @@
+import copy
 import matplotlib.pyplot as plt
 from operators import LLH_CLASSES
-from solvers import RandomSelectionSolver, EfficacyRouletteSolver
-from utils import create_initial, calculate_objective
+from solvers import (
+    RandomSelectionSolver,
+    EfficacyRouletteSolver,
+    ReinforcementSolver,
+    RandomReinforcementSolver,
+)
+from utils import create_initial
 import numpy as np
 
 # Set parameters
 N = 4
-MAX_ITERATIONS = 1000
+MAX_ITERATIONS = 10000
 ACCEPTANCE_CRITERIA = [
     "accept_improving",
     "accept_any",
@@ -14,6 +20,8 @@ ACCEPTANCE_CRITERIA = [
 SOLVER_CLASSES = [
     RandomSelectionSolver,
     EfficacyRouletteSolver,
+    ReinforcementSolver,
+    RandomReinforcementSolver,
 ]
 RUNS = 31
 
@@ -38,6 +46,7 @@ iterations = {
 for Solver in SOLVER_CLASSES:
     for criterion in ACCEPTANCE_CRITERIA:
         for _ in range(RUNS):
+            box_copy = copy.deepcopy(box)
             # Create a solver
             solver = Solver(
                 box, operators, MAX_ITERATIONS, acceptance_criterion=criterion
