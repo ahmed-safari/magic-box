@@ -42,7 +42,7 @@ class RandomReinforcementSolver(BaseSolver):
                     self.max_iterations * self.training_percentage,
                     self.max_iterations,
                 )
-                print(random_number)
+                # print(random_number)
                 # if the random number is less than the random selection percentage, select a random operator
                 if (
                     random_number
