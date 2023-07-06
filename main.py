@@ -12,10 +12,11 @@ import numpy as np
 
 # Set parameters
 N = 4
-MAX_ITERATIONS = 10000
+MAX_ITERATIONS = 1000
 ACCEPTANCE_CRITERIA = [
     "accept_improving",
     "accept_any",
+    "accept_with_tolerance",
 ]
 SOLVER_CLASSES = [
     RandomSelectionSolver,

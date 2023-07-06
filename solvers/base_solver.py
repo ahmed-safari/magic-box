@@ -12,6 +12,7 @@ class BaseSolver:
     ACCEPTANCE_CLASSES = {
         "accept_any": AcceptAny(),
         "accept_improving": AcceptImproving(),
+        "accept_with_tolerance": AcceptWithTolerance(),
     }
 
     def __init__(
