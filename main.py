@@ -17,6 +17,7 @@ ACCEPTANCE_CRITERIA = [
     "accept_improving",
     "accept_any",
     "accept_with_tolerance",
+    "accept_with_probability",
 ]
 SOLVER_CLASSES = [
     RandomSelectionSolver,
