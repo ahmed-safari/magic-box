@@ -1,11 +1,16 @@
 from operators import LLH_CLASSES
-from solvers import RandomSelectionSolver, EfficacyRouletteSolver
+from solvers import (
+    RandomSelectionSolver,
+    EfficacyRouletteSolver,
+    ReinforcementSolver,
+    RandomReinforcementSolver,
+)
 from utils import create_initial, calculate_objective
 
 
 # Set parameters
-N = 3
-MAX_ITERATIONS = 1000
+N = 4
+MAX_ITERATIONS = 100
 
 
 # Create a box
@@ -16,8 +21,13 @@ operators = LLH_CLASSES
 
 
 # Create a solver
-solver = EfficacyRouletteSolver(
-    box, operators, MAX_ITERATIONS, acceptance_criterion="accept_improving"
+solver = RandomReinforcementSolver(
+    box,
+    operators,
+    MAX_ITERATIONS,
+    acceptance_criterion="accept_improving",
+    training_percentage=0.2,
+    random_selection_percentage=0.5,
 )
 
 # Solve the box

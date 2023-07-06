@@ -4,79 +4,77 @@ from .base_solver import BaseSolver
 
 
 class RandomReinforcementSolver(BaseSolver):
+    def __init__(
+        self,
+        solution,
+        llh_list,
+        max_iterations,
+        acceptance_criterion="accept_any",
+        training_percentage=0.1,
+        random_selection_percentage=0.1,
+    ):
+        super().__init__(solution, llh_list, max_iterations, acceptance_criterion)
+        self.training_percentage = training_percentage
+        self.random_selection_percentage = random_selection_percentage
+
     def solve(self):
-        # list of operators
-        llh = self.llh_list
-
         # Create the list with scores of operators initalized to 0
-        operators_scores = [0 for _ in range(len(llh))]
 
-        """
-            splitting the total iterations 
-            20 % for scoring and ranking the operators
-            80% for actually applying the best operators   
-            Score is tracked in both cases 
-        """
+        # operators_scores = [0 for _ in range(len(self.llh))]
+        operators_scores = [0] * len(self.llh_list)
 
-        test_operators = int(self.max_iterations * 0.2)  # 20%
-        rest_iterations = self.max_iterations - test_operators
+        for i in range(self.max_iterations):
+            if self.cost == 0:
+                return self.solution  # return the solution if found
 
-        # first score the operators
-        for i in range(test_operators):
-            operator = llh[i % len(llh)]  # wrapping to restart the list each time
+            # if we are in the first x% of the iterations, select an operator in a round robin fashion
+            if i < self.max_iterations * self.training_percentage:
+                # print("Training phase")
+                operator_index = i % len(operators_scores)
+                operator = self.llh_list[operator_index]
+                # print(operator.__class__.__name__)
+
+            # Else, select the LLH with the highest score
+            else:
+                # print("Selection phase")
+                # generate number between where the training phase ends and and number of iterations
+                random_number = random.randint(
+                    self.max_iterations * self.training_percentage,
+                    self.max_iterations,
+                )
+                print(random_number)
+                # if the random number is less than the random selection percentage, select a random operator
+                if (
+                    random_number
+                    < self.max_iterations * self.random_selection_percentage
+                ):
+                    # print("Random selection")
+                    operator_index = random.randint(0, len(operators_scores) - 1)
+                    operator = self.llh_list[operator_index]
+                else:
+                    # print("Highest score selection")
+                    operator_index = operators_scores.index(max(operators_scores))
+                    operator = self.llh_list[operator_index]
+                # print(operator.__class__.__name__)
 
             # Apply the operator
             operator.apply(self.solution)
 
             # Calculate the new cost
-            cost = calculate_objective(self.solution)
-            # Check if the new solution is better than the current best one (and update it if so)
-
-            # incrementing or decrementing score at the index of the operator
-            if cost == 0:
-                operators_scores[i] += 1
-
-            else:
-                operators_scores[i] -= 1
-
-        """
-            Now we have two cases again
-            Reinforcement Selection which will be applied 90% of the time (90 iterations out of every 100)
-            Random Selection which will be applied for the rest of the 10%
-        """
-
-        counter_RL = 0  # this for the random
-        counter_Random = 0
-
-        for j in range(rest_iterations):
-            if counter_RL == 90:
-                operator = random.choice(self.llh_list)
-
-                counter_Random += 1
-
-                if counter_Random == 10:
-                    counter_RL = 0
-                    counter_Random = 0
-
-            else:
-                # retrieving the operators with highest score
-                max_score = operators_scores.index(max(operators_scores))
-                operator = llh[max_score]
-
-                counter_RL += 1
-
-            operator.apply(self.solution)
-
-            # calc the score
             new_cost = calculate_objective(self.solution)
-            self.check_best(new_cost, self.solution, j)
 
-            # Check if the new solution is accepted
+            # Check if the new solution is better than the current best one (and update it if so)
+            self.check_best(new_cost, self.solution, i)
+
             if self.acceptance.accept(new_cost=new_cost, old_cost=self.cost):
-                self.cost = new_cost  # Update the current cost
-
-            # Otherwise, revert the operator
+                self.cost = new_cost
+                operators_scores[
+                    operator_index
+                ] += 1  # incrementing the score of the operator
+                operator.update_score(1)  # incrementing the score of the operator
             else:
                 operator.revert(self.solution)
+                operators_scores[operator_index] -= 1
+                operator.update_score(-1)  # decrementing the score of the operator
 
         return self.solution
