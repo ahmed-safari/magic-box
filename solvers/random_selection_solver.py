@@ -30,4 +30,4 @@ class RandomSelectionSolver(BaseSolver):
             else:
                 operator.revert(self.solution)
 
-        return self.solution
+        return self.best_solution
