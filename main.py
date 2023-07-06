@@ -12,7 +12,7 @@ import numpy as np
 
 # Set parameters
 N = 4
-MAX_ITERATIONS = 1000
+MAX_ITERATIONS = 10000
 ACCEPTANCE_CRITERIA = [
     "accept_improving",
     "accept_any",
@@ -22,7 +22,7 @@ SOLVER_CLASSES = [
     RandomSelectionSolver,
     EfficacyRouletteSolver,
     ReinforcementSolver,
-    RandomReinforcementSolver,
+    # RandomReinforcementSolver,
 ]
 RUNS = 31
 
@@ -47,10 +47,12 @@ iterations = {
 for Solver in SOLVER_CLASSES:
     for criterion in ACCEPTANCE_CRITERIA:
         for _ in range(RUNS):
+            # box = create_initial(N)
             box_copy = copy.deepcopy(box)
+
             # Create a solver
             solver = Solver(
-                box, operators, MAX_ITERATIONS, acceptance_criterion=criterion
+                box_copy, operators, MAX_ITERATIONS, acceptance_criterion=criterion
             )
 
             # Solve the box
