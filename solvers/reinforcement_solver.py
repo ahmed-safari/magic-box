@@ -22,7 +22,7 @@ class ReinforcementSolver(BaseSolver):
         for i in range(test_operators):
 
             operator = llh[i % len(llh)]
-            score_index = operator.index(operator)
+            score_index = i % len(operators_scores)
 
 
             # Apply the operator
@@ -37,6 +37,7 @@ class ReinforcementSolver(BaseSolver):
                 return self.solution # not sure if we should consider returning in the tracking phase
             
             if cost <10: # baseline cost as cost = 0 means found the solution
+
                 operators_scores[score_index]+=1
 
             else:
@@ -50,7 +51,7 @@ class ReinforcementSolver(BaseSolver):
             max_score_index = operators_scores.index(max(operators_scores))
             max_op = llh[max_score_index]
              
-            max_op(self.solution) # Call the function with the solution argument
+            max_op.apply(self.solution) # Call the function with the solution argument
             
             # calc the score
             new_cost = calculate_objective(self.solution) 
