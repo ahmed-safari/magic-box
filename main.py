@@ -1,5 +1,5 @@
 from operators import LLH_CLASSES
-from solvers import RandomSelectionSolver
+from solvers import RandomSelectionSolver, EfficacyRouletteSolver
 from utils import create_initial, calculate_objective
 
 
@@ -16,7 +16,7 @@ operators = LLH_CLASSES
 
 
 # Create a solver
-solver = RandomSelectionSolver(
+solver = EfficacyRouletteSolver(
     box, operators, MAX_ITERATIONS, acceptance_criterion="accept_improving"
 )
 
@@ -30,3 +30,8 @@ print("Found at iteration:", solver.found_at)
 
 print("Final accepted cost:", solver.cost)
 print("Final accepted solution:", solver.solution)
+
+# Print scores of the operators
+print("Scores:")
+for operator in solver.llh_list:
+    print(f"{operator.__class__.__name__}: {operator.score}")
