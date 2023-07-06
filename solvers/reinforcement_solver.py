@@ -4,78 +4,59 @@ from .base_solver import BaseSolver
 
 
 class ReinforcementSolver(BaseSolver):
-    def solve(self):
-        # list of operators
-        llh = self.llh_list
+    def __init__(
+        self,
+        solution,
+        llh_list,
+        max_iterations,
+        acceptance_criterion="accept_any",
+        training_percentage=0.1,
+    ):
+        super().__init__(solution, llh_list, max_iterations, acceptance_criterion)
+        self.training_percentage = training_percentage
 
+    def solve(self):
         # Create the list with scores of operators initalized to 0
 
-        operators_scores= [0 for _ in range(len(llh))]
+        # operators_scores = [0 for _ in range(len(self.llh))]
+        operators_scores = [0] * len(self.llh_list)
 
-    
-        # split of iterations
-    
-        test_operators = int(self.max_iterations * 0.2) # 20%
-        rest_iterations = self.max_iterations - test_operators
+        for i in range(self.max_iterations):
+            if self.cost == 0:
+                return self.solution  # return the solution if found
 
-        # first score the operators
-        for i in range(test_operators):
+            # if we are in the first 20% of the iterations, select an operator in a round robin fashion
+            if i < self.max_iterations * self.training_percentage:
+                # print("round robin")
+                operator_index = i % len(operators_scores)
+                operator = self.llh_list[operator_index]
+                # print(operator.__class__.__name__)
 
-            operator = llh[i % len(llh)]
-            score_index = i % len(operators_scores)
-
+            # Else, select the LLH with the highest score
+            else:
+                # print("highest score")
+                operator_index = operators_scores.index(max(operators_scores))
+                operator = self.llh_list[operator_index]
+                # print(operator.__class__.__name__)
 
             # Apply the operator
             operator.apply(self.solution)
 
-
             # Calculate the new cost
-            cost = calculate_objective(self.solution)
-            # Check if the new solution is better than the current best one (and update it if so)      
+            new_cost = calculate_objective(self.solution)
 
-            if cost == 0:
-                return self.solution # not sure if we should consider returning in the tracking phase
-            
-            if cost <10: # baseline cost as cost = 0 means found the solution
+            # Check if the new solution is better than the current best one (and update it if so)
+            self.check_best(new_cost, self.solution, i)
 
-                operators_scores[score_index]+=1
-
-            else:
-                operators_scores[score_index]-=1
-
-
-        # second choose the operator with maximum score
-        
-        for j in range(rest_iterations):
-
-            max_score_index = operators_scores.index(max(operators_scores))
-            max_op = llh[max_score_index]
-             
-            max_op.apply(self.solution) # Call the function with the solution argument
-            
-            # calc the score
-            new_cost = calculate_objective(self.solution) 
-
-            if new_cost == 0:
-                return self.solution
-            
-            elif new_cost < 10:
-                operators_scores[max_score_index]+=1
-            else:
-                operators_scores[max_score_index]-=1
-
-
-            self.check_best(new_cost, self.solution, j)
-
-            # Check if the new solution is accepted
             if self.acceptance.accept(new_cost=new_cost, old_cost=self.cost):
-                self.cost = new_cost  # Update the current cost
-
-            # Otherwise, revert the operator
+                self.cost = new_cost
+                operators_scores[
+                    operator_index
+                ] += 1  # incrementing the score of the operator
+                operator.update_score(1)  # incrementing the score of the operator
             else:
                 operator.revert(self.solution)
+                operators_scores[operator_index] -= 1
+                operator.update_score(-1)  # decrementing the score of the operator
 
         return self.solution
-
-
-
