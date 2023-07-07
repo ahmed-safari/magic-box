@@ -13,6 +13,7 @@ class HyperHeuristic:
         max_iterations=1000,
         n=3,
         max_stuck_count=10,
+        stuck_tolerance=0.3,
         acceptance_tolerance=0.2,
         acceptance_probability=0.5,
         reinforcment_training_percentage=0.1,
@@ -26,14 +27,21 @@ class HyperHeuristic:
         self.found_at = None
         self.solution = None
         self.acceptance_classes = {
-            "accept_any": AcceptAny(),
-            "accept_improving": AcceptImproving(),
+            "accept_any": AcceptAny(
+                max_stuck_count=max_stuck_count, stuck_tolerance=stuck_tolerance
+            ),
+            "accept_improving": AcceptImproving(
+                max_stuck_count=max_stuck_count, stuck_tolerance=stuck_tolerance
+            ),
             "accept_with_tolerance": AcceptWithTolerance(
                 tolerance=acceptance_tolerance,
                 max_stuck_count=max_stuck_count,
+                stuck_tolerance=stuck_tolerance,
             ),
             "accept_with_probability": AcceptWithProbability(
-                acceptance_probability=acceptance_probability
+                acceptance_probability=acceptance_probability,
+                max_stuck_count=max_stuck_count,
+                stuck_tolerance=stuck_tolerance,
             ),
         }
 
@@ -115,6 +123,7 @@ class HyperHeuristic:
             self.check_best(new_cost, i + 1)
 
             did_accept = self.acceptance_method.accept(new_cost, old_cost)
+            print("Meow")
             self.selection_method.update_operator_stats(did_accept)
             self.selection_method.update_operator_score(new_cost, old_cost, did_accept)
 
