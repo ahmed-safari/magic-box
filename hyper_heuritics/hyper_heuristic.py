@@ -88,7 +88,7 @@ class HyperHeuristic:
         new_cost = old_cost = self.best_cost = calculate_objective(solution)
         did_accept = True
 
-        for i in range(1, self.max_iterations + 1):
+        for i in range(0, self.max_iterations):
             if old_cost == 0:
                 break
 
@@ -102,7 +102,7 @@ class HyperHeuristic:
             operator.apply(solution)
 
             new_cost = calculate_objective(solution)
-            self.check_best(new_cost, i)
+            self.check_best(new_cost, i + 1)
 
             did_accept = self.acceptance_method.accept(new_cost, old_cost)
             self.selection_method.update_operator_stats(did_accept)
