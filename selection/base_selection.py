@@ -8,7 +8,7 @@ Base class for solvers.
 
 
 class BaseSelection:
-    def __init__(self, llh_list, max_iterations):
+    def __init__(self, llh_list, max_iterations=1000):
         self.llh_list = llh_list
         self.max_iterations = max_iterations
         self.operator = None
@@ -19,5 +19,5 @@ class BaseSelection:
             if did_accept:
                 self.operator.update_accepted()  # Increment the accepted count
 
-    def select_operator(self, new_cost, old_cost, did_accept):
+    def select_operator(self, new_cost, old_cost, did_accept, current_iteration):
         raise NotImplementedError()

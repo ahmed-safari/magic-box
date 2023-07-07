@@ -29,7 +29,7 @@ class EfficacyRouletteSelection(BaseSelection):
             if current > pick:  # If the current score is greater than the random number
                 return llh  # Return the current LLH
 
-    def select_operator(self, new_cost, old_cost, did_accept):
+    def select_operator(self, new_cost, old_cost, did_accept, current_iteration):
         #  Select a random LLH from the list of LLHs with a probability proportional to its score
         self.operator = self.roulette_wheel_select()
 
