@@ -10,21 +10,19 @@ class SwapLargest(BaseOperator):
         self.y2 = 0
 
     def apply(self, box):
-        # Find the indices of the two largest elements in the 2D box
+        # Get the size of the box
         n = len(box)
-        largest_val1 = largest_val2 = float("-inf")
+        largest1, largest2 = n * n, n * n - 1  # The largest and second largest numbers
+
+        # Find the locations of the two largest numbers
         for i in range(n):
             for j in range(n):
-                if box[i][j] > largest_val1:
-                    largest_val2 = largest_val1
-                    self.x2, self.y2 = self.x1, self.y1
-                    largest_val1 = box[i][j]
+                if box[i][j] == largest1:
                     self.x1, self.y1 = i, j
-                elif box[i][j] > largest_val2:
-                    largest_val2 = box[i][j]
+                elif box[i][j] == largest2:
                     self.x2, self.y2 = i, j
 
-        # Swap the two largest elements
+        # Swap the two largest numbers
         box[self.x1][self.y1], box[self.x2][self.y2] = (
             box[self.x2][self.y2],
             box[self.x1][self.y1],
