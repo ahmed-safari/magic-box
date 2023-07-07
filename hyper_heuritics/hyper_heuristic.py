@@ -123,7 +123,7 @@ class HyperHeuristic:
             self.check_best(new_cost, i + 1)
 
             did_accept = self.acceptance_method.accept(new_cost, old_cost)
-            print("Meow")
+            # print("Meow")
             self.selection_method.update_operator_stats(did_accept)
             self.selection_method.update_operator_score(new_cost, old_cost, did_accept)
 
