@@ -2,10 +2,10 @@ from acceptance import *
 from operators import LLH_CLASSES
 from selection import *
 from utils import *
+import json
 
 
 class HyperHeuristic:
-    # TODO: Add setup() method to read from text and validate
     def __init__(
         self,
         acceptance_method="accept_any",
@@ -78,6 +78,16 @@ class HyperHeuristic:
             )
         else:  # If the selection method is available
             self.selection_method = self.selection_classes[selection_method]
+
+    @classmethod
+    def setup(self, filename="config.json"):
+        # Read the configuration file
+
+        with open(filename, "r") as f:
+            params = json.load(f)
+        # print(params)
+        # Create the HyperHeuristic instance using the parameters from the configuration file
+        return self(**params)
 
     def solve(self):
         print(

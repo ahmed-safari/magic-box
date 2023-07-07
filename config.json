@@ -1,0 +1,12 @@
+{
+    "acceptance_method": "accept_any",
+    "selection_method": "random_selection",
+    "max_iterations": 69,
+    "n": 3,
+    "max_stuck_count": 10,
+    "acceptance_tolerance": 0.2,
+    "acceptance_probability": 0.5,
+    "reinforcment_training_percentage": 0.1,
+    "random_reinforcement_selection_percentage": 0.1
+  }
+  
