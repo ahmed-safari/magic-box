@@ -35,11 +35,11 @@ class BaseAcceptance:
     #     return False
     def escape_local_optima(self, new_cost, old_cost):
         if self.stuck_count >= self.max_stuck_count:
-            print("Stuck for too long")
+            # print("Stuck for too long")
             # print("New cost: ", new_cost)
             # print("Old cost: ", old_cost)
-            print("Stuck count: ", self.stuck_count)
-            print("Stuck tolerance: ", self.stuck_tolerance * 100, "%")
+            # print("Stuck count: ", self.stuck_count)
+            # print("Stuck tolerance: ", self.stuck_tolerance * 100, "%")
             if new_cost <= old_cost * 1 + self.stuck_tolerance:
                 self.stuck_count = 0
                 self.stuck_tolerance = (
