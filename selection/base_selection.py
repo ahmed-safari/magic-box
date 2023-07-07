@@ -21,3 +21,6 @@ class BaseSelection:
 
     def select_operator(self, new_cost, old_cost, did_accept, current_iteration):
         raise NotImplementedError()
+
+    def update_operator_score(self, new_cost, old_cost, did_accept):
+        pass

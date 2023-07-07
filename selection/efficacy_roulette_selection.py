@@ -33,8 +33,8 @@ class EfficacyRouletteSelection(BaseSelection):
         #  Select a random LLH from the list of LLHs with a probability proportional to its score
         self.operator = self.roulette_wheel_select()
 
-        # Update the score of the LLH
+        return self.operator
+
+    def update_operator_score(self, new_cost, old_cost, did_accept):
         self.llh_scores[self.llh_list.index(self.operator)] += old_cost - new_cost
         self.operator.update_score(old_cost - new_cost)
-
-        return self.operator

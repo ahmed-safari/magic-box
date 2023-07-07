@@ -28,3 +28,11 @@ class ReinforcementSelection(BaseSelection):
             self.operator.update_score(-1)
 
         return self.operator
+
+    def update_operator_score(self, new_cost, old_cost, did_accept):
+        if did_accept:
+            self.llh_scores[self.llh_list.index(self.operator)] += 1
+            self.operator.update_score(1)
+        else:
+            self.llh_scores[self.llh_list.index(self.operator)] -= 1
+            self.operator.update_score(-1)

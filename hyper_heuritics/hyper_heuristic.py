@@ -106,6 +106,7 @@ class HyperHeuristic:
 
             did_accept = self.acceptance_method.accept(new_cost, old_cost)
             self.selection_method.update_operator_stats(did_accept)
+            self.selection_method.update_operator_score(new_cost, old_cost, did_accept)
 
             if did_accept:
                 old_cost = new_cost
