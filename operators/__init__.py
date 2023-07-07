@@ -10,6 +10,7 @@ from .reverse_row import ReverseRow
 from .reverse_column import ReverseColumn
 from .rotate_270 import Rotate270
 from .rotate_180 import Rotate180
+from .swap_largest import SwapLargest
 
 LLH_CLASSES = [
     SwapElements(),
@@ -22,6 +23,7 @@ LLH_CLASSES = [
     SwapOddEven(),
     ReverseRow(),
     ReverseColumn(),
+    SwapLargest(),
     # Rotate270(),
     # Rotate180(),
 ]
