@@ -1,18 +1,11 @@
 from utils import *
 from acceptance import *
-from .base_solver import BaseSolver
+from .base_selection import BaseSelection
 
 
-class ReinforcementSolver(BaseSolver):
-    def __init__(
-        self,
-        solution,
-        llh_list,
-        max_iterations,
-        acceptance_criterion="accept_any",
-        training_percentage=0.1,
-    ):
-        super().__init__(solution, llh_list, max_iterations, acceptance_criterion)
+class ReinforcementSolver(BaseSelection):
+    def __init__(self, llh_list, max_iterations, training_percentage=0.1):
+        super().__init__(llh_list, max_iterations)
         self.training_percentage = training_percentage
 
     def solve(self):
