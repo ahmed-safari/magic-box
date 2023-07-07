@@ -3,7 +3,7 @@ from .base_acceptance import BaseAcceptance
 
 
 class AcceptWithProbability(BaseAcceptance):
-    def __init__(self, acceptance_probability=0.05):
+    def __init__(self, acceptance_probability=0.5):
         super().__init__()
         self.acceptance_probability = acceptance_probability
 
