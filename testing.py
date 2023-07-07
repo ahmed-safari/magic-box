@@ -1,13 +1,14 @@
 from hyper_heuritics import HyperHeuristic
 
-MAX_ITERATIONS = 10000
+MAX_ITERATIONS = 20
 
 # Create a solver
 solver = HyperHeuristic(
     max_iterations=MAX_ITERATIONS,
     n=4,
     acceptance_method="accept_improving",
-    selection_method="efficacy_roulette_selection",
+    selection_method="random_reinforcement_selection",
+    random_reinforcement_selection_percentage=0.5,
 )
 
 # Solve the box
