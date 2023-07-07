@@ -1,87 +1,37 @@
-import copy
-import matplotlib.pyplot as plt
-from operators import LLH_CLASSES
-from solvers import (
-    RandomSelectionSolver,
-    EfficacyRouletteSolver,
-    ReinforcementSolver,
-    RandomReinforcementSolver,
-)
-from utils import create_initial
-import numpy as np
+from hyper_heuritics import HyperHeuristic
 
-# Set parameters
-N = 4
-MAX_ITERATIONS = 10000
-ACCEPTANCE_CRITERIA = [
-    "accept_improving",
-    "accept_any",
-    "accept_with_tolerance",
-    "accept_with_probability",
-]
-SOLVER_CLASSES = [
-    RandomSelectionSolver,
-    EfficacyRouletteSolver,
-    ReinforcementSolver,
-    # RandomReinforcementSolver,
-]
-RUNS = 31
 
-# Create a box
-box = create_initial(N)
+# # Create a solver
+# hyper_heuristic = HyperHeuristic(
+#     max_iterations=10000,
+#     n=4,
+#     acceptance_method="accept_improving",
+#     selection_method="random_reinforcement",
+#     random_reinforcement_selection_percentage=0.5,
+# )
 
-# Create the list of operators
-operators = LLH_CLASSES
+hyper_heuristic = HyperHeuristic.setup("config.json")
 
-# Test all solver/criterion combinations
-costs = {
-    solver.__name__ + " (" + criterion + ")": []
-    for solver in SOLVER_CLASSES
-    for criterion in ACCEPTANCE_CRITERIA
-}
-iterations = {
-    solver.__name__ + " (" + criterion + ")": []
-    for solver in SOLVER_CLASSES
-    for criterion in ACCEPTANCE_CRITERIA
-}
+# Solve the box
+hyper_heuristic.solve()
 
-for Solver in SOLVER_CLASSES:
-    for criterion in ACCEPTANCE_CRITERIA:
-        for _ in range(RUNS):
-            # box = create_initial(N)
-            box_copy = copy.deepcopy(box)
+# Print the solution
+# print("Best Solution:", solver.best_solution)
+print("Best Cost:", hyper_heuristic.best_cost)
+print("Found at iteration:", hyper_heuristic.found_at)
 
-            # Create a solver
-            solver = Solver(
-                box_copy, operators, MAX_ITERATIONS, acceptance_criterion=criterion
-            )
+# print("Final accepted cost:", solver.cost)
+print("Final accepted solution:", hyper_heuristic.solution)
 
-            # Solve the box
-            solver.solve()
+#  self.selected_count = 0
+# self.accepted_count = 0
+# Print scores of the operators
+print("Operators Stats:")
+selections_total = 0
+for operator in hyper_heuristic.llh_list:
+    print(
+        f"{operator.__class__.__name__}: Selected: {operator.selected_count}, Accepted: {operator.accepted_count}, Score: {operator.score}"
+    )
+    selections_total += operator.selected_count
 
-            # Store the result
-            costs[Solver.__name__ + " (" + criterion + ")"].append(solver.best_cost)
-            iterations[Solver.__name__ + " (" + criterion + ")"].append(solver.found_at)
-
-# Sort the results by median best cost, ascending
-sorted_keys = sorted(costs.keys(), key=lambda x: np.median(costs[x]))
-
-# Plot the results
-plt.figure(figsize=(10, 5))
-
-# Box plot of best costs
-plt.subplot(121)
-plt.boxplot([costs[key] for key in sorted_keys], vert=False, patch_artist=True)
-plt.yticks(np.arange(1, len(sorted_keys) + 1), sorted_keys)
-plt.xlabel("Best Cost")
-plt.title("Best Cost Box Plots")
-
-# Box plot of iterations at which the best solution was found
-plt.subplot(122)
-plt.boxplot([iterations[key] for key in sorted_keys], vert=False, patch_artist=True)
-plt.yticks(np.arange(1, len(sorted_keys) + 1), sorted_keys)
-plt.xlabel("Found_at Iteration")
-plt.title("Iteration Box Plots")
-
-plt.tight_layout()
-plt.show()
+print("Total selections:", selections_total)
