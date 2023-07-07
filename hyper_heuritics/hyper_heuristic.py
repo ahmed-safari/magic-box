@@ -15,7 +15,8 @@ class HyperHeuristic:
         max_stuck_count=10,
         acceptance_tolerance=0.2,
         acceptance_probability=0.5,
-        training_percentage=0.1,
+        reinforcment_training_percentage=0.1,
+        random_reinforcement_selection_percentage=0.1,
     ):
         self.llh_list = LLH_CLASSES
         self.max_iterations = max_iterations
@@ -48,7 +49,13 @@ class HyperHeuristic:
             "reinforcment_selection": ReinforcementSelection(
                 llh_list=self.llh_list,
                 max_iterations=self.max_iterations,
-                training_percentage=training_percentage,
+                training_percentage=reinforcment_training_percentage,
+            ),
+            "random_reinforcement_selection": RandomReinforcementSelection(
+                llh_list=self.llh_list,
+                max_iterations=self.max_iterations,
+                training_percentage=reinforcment_training_percentage,
+                random_selection_percentage=random_reinforcement_selection_percentage,
             ),
         }
         # TODO: Add checks
