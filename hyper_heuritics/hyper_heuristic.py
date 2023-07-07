@@ -14,6 +14,7 @@ class HyperHeuristic:
         n=3,
         max_stuck_count=10,
         stuck_tolerance=0.3,
+        stuck_tolerance_increment=0,
         acceptance_tolerance=0.2,
         acceptance_probability=0.5,
         reinforcment_training_percentage=0.1,
@@ -27,39 +28,41 @@ class HyperHeuristic:
         self.found_at = None
         self.solution = None
         self.acceptance_classes = {
-            "accept_any": AcceptAny(
-                max_stuck_count=max_stuck_count, stuck_tolerance=stuck_tolerance
-            ),
+            "accept_any": AcceptAny(),
             "accept_improving": AcceptImproving(
-                max_stuck_count=max_stuck_count, stuck_tolerance=stuck_tolerance
+                max_stuck_count=max_stuck_count,
+                stuck_tolerance=stuck_tolerance,
+                stuck_tolerance_increment=stuck_tolerance_increment,
             ),
             "accept_with_tolerance": AcceptWithTolerance(
                 tolerance=acceptance_tolerance,
                 max_stuck_count=max_stuck_count,
                 stuck_tolerance=stuck_tolerance,
+                stuck_tolerance_increment=stuck_tolerance_increment,
             ),
             "accept_with_probability": AcceptWithProbability(
                 acceptance_probability=acceptance_probability,
                 max_stuck_count=max_stuck_count,
                 stuck_tolerance=stuck_tolerance,
+                stuck_tolerance_increment=stuck_tolerance_increment,
             ),
         }
 
         self.selection_classes = {
-            "random_selection": RandomSelection(
+            "random": RandomSelection(
                 llh_list=self.llh_list,
                 max_iterations=self.max_iterations,
             ),
-            "efficacy_roulette_selection": EfficacyRouletteSelection(
+            "efficacy_roulette": EfficacyRouletteSelection(
                 llh_list=self.llh_list,
                 max_iterations=self.max_iterations,
             ),
-            "reinforcment_selection": ReinforcementSelection(
+            "reinforcement": ReinforcementSelection(
                 llh_list=self.llh_list,
                 max_iterations=self.max_iterations,
                 training_percentage=reinforcment_training_percentage,
             ),
-            "random_reinforcement_selection": RandomReinforcementSelection(
+            "random_reinforcement": RandomReinforcementSelection(
                 llh_list=self.llh_list,
                 max_iterations=self.max_iterations,
                 training_percentage=reinforcment_training_percentage,

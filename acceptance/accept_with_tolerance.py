@@ -2,10 +2,17 @@ from .base_acceptance import BaseAcceptance
 
 
 class AcceptWithTolerance(BaseAcceptance):
-    def __init__(self, tolerance=0.1, max_stuck_count=10, stuck_tolerance=0.1):
+    def __init__(
+        self,
+        tolerance=0.1,
+        max_stuck_count=10,
+        stuck_tolerance=0.1,
+        stuck_tolerance_increment=0,
+    ):
         super().__init__(
             max_stuck_count=max_stuck_count,
             stuck_tolerance=stuck_tolerance,
+            stuck_tolerance_increment=stuck_tolerance_increment,
         )  # call the parent constructor (to initialize self.stuck_count)
         self.tolerance = tolerance  # How much worse we allow the new solution to be
 
