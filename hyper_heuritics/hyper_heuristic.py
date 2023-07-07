@@ -13,6 +13,9 @@ class HyperHeuristic:
         max_iterations=1000,
         n=3,
         max_stuck_count=10,
+        acceptance_tolerance=0.2,
+        acceptance_probability=0.5,
+        training_percentage=0.1,
     ):
         self.llh_list = LLH_CLASSES
         self.max_iterations = max_iterations
@@ -24,11 +27,15 @@ class HyperHeuristic:
         self.acceptance_classes = {
             "accept_any": AcceptAny(),
             "accept_improving": AcceptImproving(),
-            "accept_with_tolerance": AcceptWithTolerance(tolerance=0.2),
+            "accept_with_tolerance": AcceptWithTolerance(
+                tolerance=acceptance_tolerance,
+                max_stuck_count=max_stuck_count,
+            ),
             "accept_with_probability": AcceptWithProbability(
-                acceptance_probability=0.05
+                acceptance_probability=acceptance_probability
             ),
         }
+
         self.selection_classes = {
             "random_selection": RandomSelection(
                 llh_list=self.llh_list,
@@ -37,6 +44,11 @@ class HyperHeuristic:
             "efficacy_roulette_selection": EfficacyRouletteSelection(
                 llh_list=self.llh_list,
                 max_iterations=self.max_iterations,
+            ),
+            "reinforcment_selection": ReinforcementSelection(
+                llh_list=self.llh_list,
+                max_iterations=self.max_iterations,
+                training_percentage=training_percentage,
             ),
         }
         # TODO: Add checks
@@ -77,6 +89,7 @@ class HyperHeuristic:
                 new_cost,
                 old_cost,
                 did_accept,
+                current_iteration=i,
             )
 
             operator.apply(solution)
