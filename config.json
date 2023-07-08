@@ -1,14 +1,14 @@
 {
     "acceptance_method": "accept_improving",
-    "selection_method": "reinforcement",
-    "max_iterations": 1000000,
-    "n": 5,
-    "max_stuck_count": 20,
-    "stuck_tolerance":3,
-    "stuck_tolerance_increment":0.001,
+    "selection_method": "efficacy_roulette",
+    "max_iterations": 100000,
+    "n": 7,
+    "max_stuck_count": 10,
+    "stuck_tolerance":0.2,
+    "stuck_tolerance_increment":0.03,
     "acceptance_tolerance": 0.2,
     "acceptance_probability": 0.5,
-    "reinforcment_training_percentage": 0.1,
-    "random_reinforcement_selection_percentage": 0.1
+    "reinforcment_training_percentage": 0.15,
+    "random_reinforcement_selection_percentage": 0.7
   }
-  
+
