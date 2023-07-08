@@ -46,6 +46,7 @@ class HyperHeuristic:
                 stuck_tolerance=stuck_tolerance,
                 stuck_tolerance_increment=stuck_tolerance_increment,
             ),
+            "accept_annealing": AcceptAnnealing(),
         }
 
         self.selection_classes = {
@@ -107,6 +108,7 @@ class HyperHeuristic:
 
         solution = create_initial(self.n)
         new_cost = old_cost = self.best_cost = calculate_objective(solution)
+        self.found_at = 0
         did_accept = True
 
         for i in range(0, self.max_iterations):
@@ -125,7 +127,7 @@ class HyperHeuristic:
             new_cost = calculate_objective(solution)
             self.check_best(new_cost, i + 1)
 
-            did_accept = self.acceptance_method.accept(new_cost, old_cost)
+            did_accept = self.acceptance_method.accept(new_cost, old_cost, i + 1)
             # print("Meow")
             self.selection_method.update_operator_stats(did_accept)
             self.selection_method.update_operator_score(new_cost, old_cost, did_accept)
