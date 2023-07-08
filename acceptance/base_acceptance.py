@@ -15,7 +15,7 @@ class BaseAcceptance:
         self.stuck_tolerance = stuck_tolerance  # How much tolerance we allow
         self.stuck_tolerance_increment = stuck_tolerance_increment
 
-    def accept(self, new_cost, old_cost):
+    def accept(self, new_cost, old_cost, current_iteration):
         raise NotImplementedError()
 
     # def escape_local_optima(self, new_cost, old_cost):

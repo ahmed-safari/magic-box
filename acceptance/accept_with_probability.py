@@ -17,7 +17,7 @@ class AcceptWithProbability(BaseAcceptance):
         )
         self.acceptance_probability = acceptance_probability
 
-    def accept(self, new_cost, old_cost):
+    def accept(self, new_cost, old_cost, current_iteration):
         if random.random() < self.acceptance_probability:
             return True
         else:

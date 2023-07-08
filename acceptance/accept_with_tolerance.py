@@ -16,7 +16,7 @@ class AcceptWithTolerance(BaseAcceptance):
         )  # call the parent constructor (to initialize self.stuck_count)
         self.tolerance = tolerance  # How much worse we allow the new solution to be
 
-    def accept(self, new_cost, old_cost):
+    def accept(self, new_cost, old_cost, current_iteration):
         # Escape local optima/minima (if we are stuck for too long, accept if within tolerance)
         if self.escape_local_optima(new_cost, old_cost):
             return True  # Accept the new solution
