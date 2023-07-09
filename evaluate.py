@@ -2,7 +2,7 @@ from hyper_heuritics import HyperHeuristic
 import csv
 import json
 import itertools
-
+from datetime import datetime
 
 RUNS = 21
 
@@ -25,24 +25,26 @@ param_ranges = {
 # Get all combinations of parameter values
 param_combinations = list(itertools.product(*param_ranges.values()))
 
+# Define the header row
+header = ["run_number"] + list(param_ranges.keys()) + ["best_cost", "found_at"]
+
+hyper_heuristic = HyperHeuristic.setup("config.json")
+# Add headers for operator stats
+for op in hyper_heuristic.llh_list:
+    op_name = op.__class__.__name__
+    header += [
+        f"{op_name}_score",
+        f"{op_name}_selected",
+        f"{op_name}_accepted",
+        f"{op_name}_rejected",
+    ]
+
+# Create a timestamped filename
+filename = datetime.now().strftime("%Y%m%d_%H%M%S") + "_results.csv"
+
 # Create a CSV file to store the results
-with open("results.csv", "w", newline="") as file:
+with open(filename, "w", newline="") as file:
     writer = csv.writer(file)
-
-    # Define the header row
-    header = ["num_runs"] + list(param_ranges.keys()) + ["best_cost", "found_at"]
-
-    hyper_heuristic = HyperHeuristic.setup("config.json")
-    # Add headers for operator stats
-    for op in hyper_heuristic.llh_list:
-        op_name = op.__class__.__name__
-        header += [
-            f"{op_name}_score",
-            f"{op_name}_selected",
-            f"{op_name}_accepted",
-            f"{op_name}_rejected",
-        ]
-
     writer.writerow(header)
 
     # For each combination of parameters...
@@ -53,58 +55,38 @@ with open("results.csv", "w", newline="") as file:
         # Update the main config with the new parameters
         config.update(new_config)
 
-        # Initialize the lists to store the results for the runs
-        best_costs = []
-        found_at_list = []
-        solutions = []
-
-        # Initialize operator stats
-        op_stats = {
-            op.__class__.__name__: {
-                "score": [],
-                "selected": [],
-                "accepted": [],
-                "rejected": [],
-            }
-            for op in hyper_heuristic.llh_list
-        }
-
-        # Run the solver times
+        # Run the solver
         for i in range(RUNS):
             # Create a new HyperHeuristic instance with the new config
             hyper_heuristic = HyperHeuristic(**config)
             # Solve the problem
             hyper_heuristic.solve()
 
-            # Append the results to the respective lists
-            best_costs.append(hyper_heuristic.best_cost)
-            found_at_list.append(hyper_heuristic.found_at)
-            # If the best cost is zero, append the solution
-            if hyper_heuristic.best_cost == 0:
-                solutions.append(hyper_heuristic.solution)
+            # Initialize operator stats
+            op_stats = {
+                op.__class__.__name__: {
+                    "score": op.score,
+                    "selected": op.selected_count,
+                    "accepted": op.accepted_count,
+                    "rejected": op.selected_count - op.accepted_count,
+                }
+                for op in hyper_heuristic.llh_list
+            }
 
-            # Collect operator stats
+            # Prepare the row to write
+            row = (
+                [i + 1]
+                + list(params)
+                + [hyper_heuristic.best_cost, hyper_heuristic.found_at]
+            )
+
+            # Add operator stats
             for op in hyper_heuristic.llh_list:
                 op_name = op.__class__.__name__
-                op_stats[op_name]["score"].append(op.score)
-                op_stats[op_name]["selected"].append(op.selected_count)
-                op_stats[op_name]["accepted"].append(op.accepted_count)
-                op_stats[op_name]["rejected"].append(
-                    op.selected_count - op.accepted_count
-                )
+                row += [
+                    op_stats[op_name][stat]
+                    for stat in ["score", "selected", "accepted", "rejected"]
+                ]
 
-        # Prepare the row to write
-        print(found_at_list)
-        row = (
-            [RUNS] + list(params) + [sum(best_costs) / RUNS, sum(found_at_list) / RUNS]
-        )
-        # Add operator stats
-        for op in hyper_heuristic.llh_list:
-            op_name = op.__class__.__name__
-            row += [
-                sum(op_stats[op_name][stat]) / RUNS
-                for stat in ["score", "selected", "accepted", "rejected"]
-            ]
-
-        # Write a new row with the average results for this parameter combination
-        writer.writerow(row)
+            # Write a new row for each run
+            writer.writerow(row)
