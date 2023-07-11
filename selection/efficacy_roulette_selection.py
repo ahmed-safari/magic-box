@@ -7,12 +7,22 @@ class EfficacyRouletteSelection(BaseSelection):
     def __init__(self, llh_list, max_iterations):
         super().__init__(llh_list, max_iterations)
         self.llh_scores = [0.0] * len(self.llh_list)  # List of scores for each LLH
+        
+    def normalize_scores(self):
+	     
+	    # Shifts the scores by subtracting the minimum score from all scores. 
+	    # This ensures all scores are non-negative and keeps the relative differences intact.
+	
+	    min_score = min(self.llh_scores)
+	    if min_score < 0:
+	        shifted_scores = [score - min_score for score in self.llh_scores]
+	    else:
+	        shifted_scores = self.llh_scores[:]  # If there's no negative score, no shift is needed
+	    return shifted_scores
 
     # This function is used to select a random LLH from the list of LLHs with a probability proportional to its score
     def roulette_wheel_select(self):
-        normalized_scores = [
-            max(0, score) for score in self.llh_scores
-        ]  # Remove negative scores
+        normalized_scores = self.normalize_scores()
         total_score = sum(normalized_scores)  # Calculate the total score
 
         if total_score == 0:  # If all scores are 0, return a random LLH
