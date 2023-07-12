@@ -4,7 +4,7 @@ import json
 import itertools
 from datetime import datetime
 
-RUNS = 21
+RUNS = 31
 
 # Load the config file
 with open("config.json", "r") as f:
@@ -12,14 +12,14 @@ with open("config.json", "r") as f:
 
 # Define the parameter ranges
 param_ranges = {
-    "acceptance_method": ["accept_improving", "accept_annealing"],
+    "acceptance_method": ["accept_any", "accept_improving", "accept_annealing", "accept_with_probability", "accept_with_tolerance"],
     "selection_method": [
         "efficacy_roulette",
         "random",
         "reinforcement",
         "random_reinforcement",
     ],
-    "n": [3],
+    "n": [8],
 }
 
 # Get all combinations of parameter values
