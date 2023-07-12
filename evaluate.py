@@ -19,7 +19,7 @@ param_ranges = {
         "reinforcement",
         "random_reinforcement",
     ],
-    "n": [8],
+    "n": [9],
 }
 
 # Get all combinations of parameter values
